@@ -1001,7 +1001,7 @@ class KpiHsseController extends Controller
             }
 
             $file = $request->file('file');
-            $path = $file->store('kpi-evidences/' . date('Y/m'), config('filesystems.default', 'public'));
+            $path = $file->store('kpi-evidences/' . date('Y/m'), 'public');
 
             $ev = KpiReportDetailEvidence::create([
                 'kpi_report_detail_id' => $targetDetail->id,
@@ -1050,7 +1050,7 @@ class KpiHsseController extends Controller
         }
 
         try {
-            Storage::disk(config('filesystems.default', 'public'))->delete($evidence->file_path);
+            Storage::disk('public')->delete($evidence->file_path);
             $evidence->delete();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
@@ -1350,7 +1350,7 @@ class KpiHsseController extends Controller
         try {
             foreach ($kpiReport->details as $d) {
                 foreach ($d->evidences as $ev) {
-                    Storage::disk(config('filesystems.default', 'public'))->delete($ev->file_path);
+                    Storage::disk('public')->delete($ev->file_path);
                 }
             }
             $kpiReport->delete();
