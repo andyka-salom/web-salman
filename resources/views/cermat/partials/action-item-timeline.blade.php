@@ -114,8 +114,8 @@
                         <p class="mb-2 fw-bold small text-body-secondary text-uppercase">Bukti Foto</p>
                         <div class="action-proof-gallery">
                             @foreach($item->photos as $photo)
-                                <a href="#" class="action-proof-item" data-bs-toggle="modal" data-bs-target="#imageViewerModal" data-img-src="{{ asset('storage/' . $photo->file_path) }}" data-img-title="Bukti Tindakan: {{ Str::limit($item->description, 50) }}">
-                                    <img src="{{ asset('storage/' . $photo->file_path) }}" class="action-proof-thumbnail" alt="Bukti Foto">
+                                <a href="#" class="action-proof-item" data-bs-toggle="modal" data-bs-target="#imageViewerModal" data-img-src="{{ Storage::disk('public')->url($photo->file_path) }}" data-img-title="Bukti Tindakan: {{ Str::limit($item->description, 50) }}">
+                                    <img src="{{ Storage::disk('public')->url($photo->file_path) }}" class="action-proof-thumbnail" alt="Bukti Foto">
                                 </a>
                             @endforeach
                         </div>

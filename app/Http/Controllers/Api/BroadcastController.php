@@ -596,7 +596,7 @@ class BroadcastController extends Controller
 
         try {
             if ($broadcast->media_url) {
-                $path = str_replace(Storage::url(''), '', $broadcast->media_url);
+                $path = str_replace(Storage::disk('public')->url(''), '', $broadcast->media_url);
                 if (Storage::disk('public')->exists($path)) {
                     Storage::disk('public')->delete($path);
                 }
@@ -633,7 +633,7 @@ class BroadcastController extends Controller
             $path = $file->store('broadcast-media', 'public');
 
             // Gunakan full URL agar bisa diakses Fonnte
-            $mediaData['media_url'] = url(Storage::url($path));
+            $mediaData['media_url'] = Storage::disk('public')->url($path);
             $mediaData['media_type'] = $this->getMediaType($file->getMimeType());
             $mediaData['media_filename'] = $file->getClientOriginalName();
         }

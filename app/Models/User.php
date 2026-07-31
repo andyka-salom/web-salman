@@ -203,7 +203,7 @@ class User extends Authenticatable
     public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo_path
-            ? asset('storage/' . $this->photo_path)
+            ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->photo_path)
             : null;
     }
 

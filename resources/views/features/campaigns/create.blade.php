@@ -112,7 +112,7 @@
                                             {{-- Existing Image --}}
                                             @if(isset($campaign) && $campaign->media)
                                                 <div id="existingMedia">
-                                                    <img src="{{ Storage::url($campaign->media) }}" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+                                                    <img src="{{ Storage::disk('public')->url($campaign->media) }}" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
                                                     <p class="small text-muted mt-2 mb-0">Current Image</p>
                                                 </div>
                                             @else

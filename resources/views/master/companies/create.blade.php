@@ -71,7 +71,7 @@
                                     {{-- Container untuk logo saat ini (Edit Mode) --}}
                                     <div id="currentLogoContainer" class="{{ (isset($company) && $company->logo) ? '' : 'd-none' }}">
                                         <div class="position-relative d-inline-block">
-                                            <img src="{{ (isset($company) && $company->logo) ? Storage::url($company->logo) : '' }}"
+                                            <img src="{{ (isset($company) && $company->logo) ? Storage::disk('public')->url($company->logo) : '' }}"
                                                  class="img-fluid rounded shadow-sm"
                                                  style="max-width: 200px; max-height: 200px;"
                                                  id="currentLogoImg">

@@ -429,13 +429,13 @@
                         @foreach($det->evidences as $ev)
                         @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                         @if($isPdf)
-                            <a href="{{ Storage::url($ev->file_path) }}" target="_blank"
+                            <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank"
                                style="width:46px;height:46px;border-radius:6px;border:2px solid #bfdbfe;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;"
                                title="{{ $ev->file_name }}">📄</a>
                         @else
                             <img class="ev-t"
-                                 src="{{ Storage::url($ev->file_path) }}"
-                                 onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                 src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                 onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                  title="{{ $ev->caption ?? $ev->file_name }}">
                         @endif
                         @endforeach

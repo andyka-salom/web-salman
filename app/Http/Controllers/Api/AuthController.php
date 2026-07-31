@@ -38,7 +38,7 @@ class AuthController extends Controller
     {
         // 1. Generate Full URL untuk Photo
         $user->photo_url = $user->photo_path
-            ? url(Storage::url($user->photo_path))
+            ? Storage::disk('public')->url($user->photo_path)
             : null;
 
         // 2. Ambil Role Names (tanpa object roles lengkap)
@@ -286,15 +286,20 @@ class AuthController extends Controller
                 }
 
                 $file = $request->file('photo');
-                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('profile-photos', $filename, 'public');
+                $extension = $file->getClientOriginalExtension();
+                $filename = uniqid() . '_' . time() . '.' . $extension;
+                $path = 'profile-photos/' . $filename;
 
                 try {
                     $manager = new ImageManager(new Driver());
-                    $image = $manager->read(storage_path('app/public/' . $path));
+                    $image = $manager->read($file);
                     if ($image->width() > 300) $image->scale(width: 300);
-                    $image->save(storage_path('app/public/' . $path), quality: 85);
-                } catch (Exception $e) { Log::warning('Image optim failed'); }
+                    Storage::disk('public')->put($path, (string) $image->encodeByExtension($extension, quality: 85));
+                } catch (Exception $e) {
+                    Log::warning('Image optim failed');
+                    // Fallback: keep the original upload untouched
+                    $path = $file->storeAs('profile-photos', $filename, 'public');
+                }
 
                 $validated['photo_path'] = $path;
             }

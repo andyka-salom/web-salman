@@ -655,8 +655,8 @@
                                                                         <div class="detail-label">Bukti Foto</div>
                                                                         <div class="proof-gallery">
                                                                             @foreach($item->photos as $photo)
-                                                                            <div class="proof-item attachment-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="{{ asset('storage/' . $photo->file_path) }}" data-img-title="Bukti Tindakan: {{ Str::limit($item->description, 40) }}">
-                                                                                <img src="{{ asset('storage/' . $photo->file_path) }}" alt="Bukti Foto">
+                                                                            <div class="proof-item attachment-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="{{ Storage::disk('public')->url($photo->file_path) }}" data-img-title="Bukti Tindakan: {{ Str::limit($item->description, 40) }}">
+                                                                                <img src="{{ Storage::disk('public')->url($photo->file_path) }}" alt="Bukti Foto">
                                                                             </div>
                                                                             @endforeach
                                                                         </div>
@@ -725,8 +725,8 @@
                                 <div class="row g-2 attachment-gallery">
                                     @foreach($report->attachments as $attachment)
                                     <div class="col-4">
-                                        <a href="#" class="attachment-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="{{ asset('storage/' . $attachment->file_path) }}" data-img-title="{{ $attachment->file_name }}">
-                                            <img src="{{ asset('storage/' . $attachment->file_path) }}" alt="{{ $attachment->file_name }}">
+                                        <a href="#" class="attachment-item" data-bs-toggle="modal" data-bs-target="#imageModal" data-img-src="{{ Storage::disk('public')->url($attachment->file_path) }}" data-img-title="{{ $attachment->file_name }}">
+                                            <img src="{{ Storage::disk('public')->url($attachment->file_path) }}" alt="{{ $attachment->file_name }}">
                                             <div class="attachment-overlay"><i class="bi bi-arrows-fullscreen fs-4"></i></div>
                                         </a>
                                     </div>

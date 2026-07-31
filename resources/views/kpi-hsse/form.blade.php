@@ -969,10 +969,10 @@ Fix v13:
                                 @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                                 <div class="ev-item" id="ev-item-lag1-{{ $ev->id }}">
                                     @if($isPdf)
-                                        <a href="{{ Storage::url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
+                                        <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
                                     @else
-                                        <img class="ev-thumb" src="{{ Storage::url($ev->file_path) }}"
-                                            onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                        <img class="ev-thumb" src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                            onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                             title="{{ $ev->caption ?? $ev->file_name }}">
                                     @endif
                                     @if($canEditKoord)
@@ -998,10 +998,10 @@ Fix v13:
                                 @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                                 <div class="ev-item" id="ev-item-lag{{ $item->item_no }}-{{ $ev->id }}">
                                     @if($isPdf)
-                                        <a href="{{ Storage::url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
+                                        <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
                                     @else
-                                        <img class="ev-thumb" src="{{ Storage::url($ev->file_path) }}"
-                                            onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                        <img class="ev-thumb" src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                            onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                             title="{{ $ev->caption ?? $ev->file_name }}">
                                     @endif
                                     @if($canEditKoord)
@@ -1026,10 +1026,10 @@ Fix v13:
                             @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                             <div class="ev-item" id="ev-item-{{ $ev->id }}">
                                 @if($isPdf)
-                                    <a href="{{ Storage::url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
+                                    <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
                                 @else
-                                    <img class="ev-thumb" src="{{ Storage::url($ev->file_path) }}"
-                                        onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                    <img class="ev-thumb" src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                        onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                         title="{{ $ev->caption ?? $ev->file_name }}">
                                 @endif
                                 @if($canEditKoord)
@@ -1298,10 +1298,10 @@ Fix v13:
                             @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                             <div class="ev-item" id="ev-item-{{ $ev->id }}">
                                 @if($isPdf)
-                                    <a href="{{ Storage::url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
+                                    <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank" class="ev-pdf" title="{{ $ev->file_name }}">📄</a>
                                 @else
-                                    <img class="ev-thumb" src="{{ Storage::url($ev->file_path) }}"
-                                        onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                    <img class="ev-thumb" src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                        onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                         title="{{ $ev->caption ?? $ev->file_name }}">
                                 @endif
                                 @if($canEditKoord)

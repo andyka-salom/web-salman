@@ -174,15 +174,23 @@
             return Carbon::parse($date)->format($finalFormat);
         }
 
-        // Helper Image Base64
+        // Helper Image Base64 (reads uploads from the public disk — local or S3 —
+        // and falls back to public/ for static assets such as logo.png)
         function imageToBase64($path) {
-            $fullPath = storage_path('app/public/' . $path);
-            if (!file_exists($fullPath)) $fullPath = public_path($path);
+            $disk = \Illuminate\Support\Facades\Storage::disk('public');
+            try {
+                if ($path && $disk->exists($path)) {
+                    $type = pathinfo($path, PATHINFO_EXTENSION) ?: 'png';
+                    return 'data:image/' . $type . ';base64,' . base64_encode($disk->get($path));
+                }
+            } catch (\Throwable $e) {
+                // fall through to static-asset lookup
+            }
 
+            $fullPath = public_path($path);
             if (file_exists($fullPath)) {
                 $type = pathinfo($fullPath, PATHINFO_EXTENSION);
-                $data = file_get_contents($fullPath);
-                return 'data:image/' . $type . ';base64,' . base64_encode($data);
+                return 'data:image/' . $type . ';base64,' . base64_encode(file_get_contents($fullPath));
             }
             return null;
         }

@@ -314,13 +314,12 @@ class MyActionItemsController extends Controller
                 $filename = uniqid() . '_' . time() . '.' . $extension;
                 $path = self::STORAGE_PATH . '/' . $filename;
 
-                // Store original file first
+                // Store original file first (acts as fallback if optimize fails)
                 $fullPath = $photo->storeAs(self::STORAGE_PATH, $filename, 'public');
-                $absolutePath = storage_path('app/public/' . $fullPath);
 
                 // Optimize image
                 try {
-                    $image = $manager->read($absolutePath);
+                    $image = $manager->read($photo);
 
                     // Resize if too large
                     if ($image->width() > self::MAX_IMAGE_WIDTH) {
@@ -335,8 +334,8 @@ class MyActionItemsController extends Controller
                         default => $image->toJpeg(quality: self::IMAGE_QUALITY)
                     };
 
-                    // Save optimized image
-                    file_put_contents($absolutePath, (string) $encoded);
+                    // Save optimized image (overwrites the original on the public disk)
+                    Storage::disk('public')->put($fullPath, (string) $encoded);
 
                     Log::info('Photo uploaded and optimized', [
                         'action_item_id' => $actionItem->id,

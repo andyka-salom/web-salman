@@ -119,7 +119,7 @@
                                         <div class="mb-3 border-bottom pb-2" id="dokumentasi-container">
                                             @foreach($campaignSalman->dokumentasi as $path)
                                                 <div class="img-preview-container">
-                                                    <img src="{{ Storage::url($path) }}" class="rounded border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                                    <img src="{{ Storage::disk('public')->url($path) }}" class="rounded border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
                                                     <button type="button" class="btn-del-img" onclick="deleteImage('dokumentasi', '{{ $path }}', this)">×</button>
                                                 </div>
                                             @endforeach
@@ -140,7 +140,7 @@
                                         <div class="mb-3 border-bottom pb-2" id="daftar_hadir-container">
                                             @foreach($campaignSalman->daftar_hadir as $path)
                                                 <div class="img-preview-container">
-                                                    <img src="{{ Storage::url($path) }}" class="rounded border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                                    <img src="{{ Storage::disk('public')->url($path) }}" class="rounded border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
                                                     <button type="button" class="btn-del-img" onclick="deleteImage('daftar_hadir', '{{ $path }}', this)">×</button>
                                                 </div>
                                             @endforeach

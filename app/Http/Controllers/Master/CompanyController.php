@@ -73,7 +73,7 @@ class CompanyController extends Controller
             ->addIndexColumn()
             ->addColumn('logo_display', function($company) {
                 if ($company->logo) {
-                    return '<img src="' . Storage::url($company->logo) . '" class="rounded-circle" width="40" height="40" alt="Logo">';
+                    return '<img src="' . Storage::disk('public')->url($company->logo) . '" class="rounded-circle" width="40" height="40" alt="Logo">';
                 }
                 return '<div class="avatar avatar-sm rounded-circle bg-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                             <span class="text-white fw-bold">' . strtoupper(substr($company->name, 0, 2)) . '</span>
@@ -356,32 +356,29 @@ class CompanyController extends Controller
     protected function handleLogoUpload($file)
     {
         // Generate unique filename
-        $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-
-        // Store original
-        $path = $file->storeAs('companies/logos', $filename, 'public');
-
-        // Optimize image (resize to max 400x400, maintain aspect ratio)
-        $fullPath = storage_path('app/public/' . $path);
+        $extension = $file->getClientOriginalExtension();
+        $filename = uniqid() . '_' . time() . '.' . $extension;
+        $path = 'companies/logos/' . $filename;
 
         try {
             // Create ImageManager instance with GD driver
             $manager = new ImageManager(new Driver());
 
-            // Read image from file system
-            $image = $manager->read($fullPath);
+            // Read image from the uploaded file (in memory — disk-agnostic)
+            $image = $manager->read($file);
 
             // Scale down if image is larger than 400px
             if ($image->width() > 400 || $image->height() > 400) {
                 $image->scale(width: 400, height: 400);
             }
 
-            // Save optimized image with 85% quality
-            $image->save($fullPath, quality: 85);
+            // Save optimized image with 85% quality to the public disk
+            Storage::disk('public')->put($path, (string) $image->encodeByExtension($extension, quality: 85));
 
         } catch (\Exception $e) {
             Log::warning('Image optimization failed', ['error' => $e->getMessage()]);
-            // Continue anyway with original image
+            // Fallback: keep the original upload untouched
+            $path = $file->storeAs('companies/logos', $filename, 'public');
         }
 
         return $path;
@@ -502,7 +499,7 @@ class CompanyController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Profil perusahaan berhasil diperbarui!',
-                    'logo_url' => $company->logo ? Storage::url($company->logo) : null
+                    'logo_url' => $company->logo ? Storage::disk('public')->url($company->logo) : null
                 ]);
             }
 

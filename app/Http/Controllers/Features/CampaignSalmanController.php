@@ -727,12 +727,11 @@ class CampaignSalmanController extends Controller
         $result = [];
         foreach ($paths as $path) {
             try {
-                $fullPath = Storage::disk('public')->path($path);
-                if (!file_exists($fullPath)) continue;
+                if (!Storage::disk('public')->exists($path)) continue;
 
-                $mime = mime_content_type($fullPath) ?: 'image/jpeg';
-                $data = base64_encode(file_get_contents($fullPath));
-                $result[] = 'data:' . $mime . ';base64,' . $data;
+                $data = Storage::disk('public')->get($path);
+                $mime = 'image/' . (strtolower(pathinfo($path, PATHINFO_EXTENSION)) ?: 'jpeg');
+                $result[] = 'data:' . $mime . ';base64,' . base64_encode($data);
             } catch (\Exception $e) {
                 Log::warning('imagesToBase64 failed for: ' . $path . ' — ' . $e->getMessage());
             }

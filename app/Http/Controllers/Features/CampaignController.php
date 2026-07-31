@@ -431,14 +431,13 @@ class CampaignController extends Controller
         $extension = strtolower($file->getClientOriginalExtension());
         $filename = uniqid() . '_' . time() . '.' . $extension;
 
-        // Store file to public disk
+        // Store original to public disk first (acts as fallback if optimize fails)
         $path = $file->storeAs(self::STORAGE_PATH, $filename, 'public');
-        $fullPath = storage_path('app/public/' . $path);
 
         try {
             // Initialize Image Manager with GD Driver
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($fullPath);
+            $image = $manager->read($file);
 
             // Resize if image is too large (maintain aspect ratio)
             if ($image->width() > self::MAX_IMAGE_WIDTH) {
@@ -454,8 +453,8 @@ class CampaignController extends Controller
                 default => $image->toJpeg(quality: self::IMAGE_QUALITY)
             };
 
-            // Save optimized image
-            file_put_contents($fullPath, (string) $encoded);
+            // Save optimized image (overwrites the original on the public disk)
+            Storage::disk('public')->put($path, (string) $encoded);
 
             Log::info('Image uploaded and optimized successfully', [
                 'path' => $path,

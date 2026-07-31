@@ -152,7 +152,7 @@
                                 <h5 class="mb-4 fw-bold text-primary">Profile Photo</h5>
                                 <div class="profile-photo-container text-center mb-3">
                                     <img id="photoPreview"
-                                         src="{{ isset($user) && $user->photo_path ? Storage::url($user->photo_path) : asset('assets/img/profile-3.jpg') }}"
+                                         src="{{ isset($user) && $user->photo_path ? Storage::disk('public')->url($user->photo_path) : asset('assets/img/profile-3.jpg') }}"
                                          class="img-fluid rounded-circle shadow"
                                          style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #fff;">
 

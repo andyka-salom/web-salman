@@ -14,7 +14,7 @@
                     {{-- Profile Content --}}
                     <div class="text-center px-4 pb-4" style="margin-top: -60px;">
                         <div class="avatar-wrapper mb-3">
-                            <img src="{{ $user->photo_path ? Storage::url($user->photo_path) : asset('assets/img/profile-3.jpg') }}"
+                            <img src="{{ $user->photo_path ? Storage::disk('public')->url($user->photo_path) : asset('assets/img/profile-3.jpg') }}"
                                  alt="avatar" class="profile-avatar" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
                         </div>
 

@@ -340,7 +340,7 @@ class BroadcastController extends Controller
             }
 
             if ($broadcast->media_url) {
-                $path = str_replace(Storage::url(''), '', $broadcast->media_url);
+                $path = str_replace(Storage::disk('public')->url(''), '', $broadcast->media_url);
                 if (Storage::disk('public')->exists($path)) {
                     Storage::disk('public')->delete($path);
                 }

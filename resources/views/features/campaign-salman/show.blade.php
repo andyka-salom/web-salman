@@ -119,7 +119,7 @@
                     <h5 class="mb-3">Cover Template</h5>
                     @if($campaignSalman->coverTemplate)
                         <div class="text-center border rounded p-2 bg-light">
-                            <img src="{{ asset('storage/' . $campaignSalman->coverTemplate->cover_image_path) }}" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
+                            <img src="{{ Storage::disk('public')->url($campaignSalman->coverTemplate->cover_image_path) }}" class="img-fluid rounded shadow-sm" style="max-height: 200px;">
                             <p class="mt-2 mb-0 fw-bold">{{ $campaignSalman->coverTemplate->name }}</p>
                         </div>
                     @else
@@ -159,8 +159,8 @@
                         <div class="row g-3">
                             @foreach($campaignSalman->dokumentasi as $path)
                                 <div class="col-6 col-md-4 col-lg-2">
-                                    <a href="{{ asset('storage/' . $path) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $path) }}" class="gallery-img border">
+                                    <a href="{{ Storage::disk('public')->url($path) }}" target="_blank">
+                                        <img src="{{ Storage::disk('public')->url($path) }}" class="gallery-img border">
                                     </a>
                                 </div>
                             @endforeach
@@ -179,8 +179,8 @@
                         <div class="row g-3">
                             @foreach($campaignSalman->daftar_hadir as $path)
                                 <div class="col-6 col-md-4 col-lg-2">
-                                    <a href="{{ asset('storage/' . $path) }}" target="_blank">
-                                        <img src="{{ asset('storage/' . $path) }}" class="gallery-img border">
+                                    <a href="{{ Storage::disk('public')->url($path) }}" target="_blank">
+                                        <img src="{{ Storage::disk('public')->url($path) }}" class="gallery-img border">
                                     </a>
                                 </div>
                             @endforeach

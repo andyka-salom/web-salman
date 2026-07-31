@@ -742,7 +742,7 @@ class CrewAssessmentController extends Controller
         if (! $request->hasFile($fileKey)) return;
 
         $labels = $request->input($labelKey, []);
-        $disk   = config('filesystems.default', 'local');
+        $disk   = 'public';
 
         foreach ($request->file($fileKey) as $i => $file) {
             $path = $file->store("crew-assessments/{$assessment->id}", $disk);

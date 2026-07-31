@@ -28,7 +28,7 @@
         <div class="profile-info">
             <div class="user-info">
                 <div class="profile-img">
-                    <img src="{{ Auth::user()->photo_path ? asset('storage/' . Auth::user()->photo_path) : asset('src/assets/img/profile-30.png') }}" alt="avatar">
+                    <img src="{{ Auth::user()->photo_path ? Storage::disk('public')->url(Auth::user()->photo_path) : asset('src/assets/img/profile-30.png') }}" alt="avatar">
                 </div>
                 <div class="profile-content">
                     <h6 class="">{{ Auth::user()->name }}</h6>

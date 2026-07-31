@@ -66,7 +66,7 @@ class UserController extends Controller
         return DataTables::eloquent($query)
             ->addIndexColumn()
             ->addColumn('photo', function($row) {
-                $url = $row->photo_path ? Storage::url($row->photo_path) : asset('assets/img/profile-3.jpg');
+                $url = $row->photo_path ? Storage::disk('public')->url($row->photo_path) : asset('assets/img/profile-3.jpg');
                 return '<img src="'.$url.'" class="rounded-circle" width="40" height="40" alt="avatar" style="object-fit: cover;">';
             })
             ->addColumn('company_name', function($row) {
@@ -341,19 +341,21 @@ class UserController extends Controller
      */
     protected function handlePhotoUpload($file)
     {
-        $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('users/photos', $filename, 'public');
-        $fullPath = storage_path('app/public/' . $path);
+        $extension = $file->getClientOriginalExtension();
+        $filename = uniqid() . '_' . time() . '.' . $extension;
+        $path = 'users/photos/' . $filename;
 
         try {
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($fullPath);
+            $image = $manager->read($file);
             if ($image->width() > 300) {
                 $image->scale(width: 300);
             }
-            $image->save($fullPath, quality: 80);
+            Storage::disk('public')->put($path, (string) $image->encodeByExtension($extension, quality: 80));
         } catch (\Exception $e) {
             Log::warning('Image optimization failed', ['error' => $e->getMessage()]);
+            // Fallback: keep the original upload untouched
+            $path = $file->storeAs('users/photos', $filename, 'public');
         }
 
         return $path;

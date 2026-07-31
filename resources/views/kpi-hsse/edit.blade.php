@@ -437,10 +437,10 @@
                                     @php $isPdf = str_contains($ev->file_type ?? '', 'pdf'); @endphp
                                     <div class="ev-wrap" id="ev-item-{{ $ev->id }}">
                                         @if($isPdf)
-                                            <a href="{{ Storage::url($ev->file_path) }}" target="_blank" class="ev-pdf-thumb" title="{{ $ev->file_name }}">📄</a>
+                                            <a href="{{ Storage::disk('public')->url($ev->file_path) }}" target="_blank" class="ev-pdf-thumb" title="{{ $ev->file_name }}">📄</a>
                                         @else
-                                            <img class="ev-img" src="{{ Storage::url($ev->file_path) }}"
-                                                 onclick="previewImg('{{ Storage::url($ev->file_path) }}','{{ e($ev->file_name) }}')"
+                                            <img class="ev-img" src="{{ Storage::disk('public')->url($ev->file_path) }}"
+                                                 onclick="previewImg('{{ Storage::disk('public')->url($ev->file_path) }}','{{ e($ev->file_name) }}')"
                                                  title="{{ $ev->caption ?? $ev->file_name }}">
                                         @endif
                                         @if($canEditKoord)

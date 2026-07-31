@@ -310,7 +310,7 @@
                                                                 <input class="form-check-input" type="checkbox" name="delete_attachments[]" value="{{ $att->id }}">
                                                             </div>
                                                             @endif
-                                                            <img src="{{ Storage::url($att->file_path) }}" class="attachment-preview">
+                                                            <img src="{{ Storage::disk('public')->url($att->file_path) }}" class="attachment-preview">
                                                             <div class="attachment-info overflow-hidden">
                                                                 <div class="small fw-bold text-truncate">{{ $att->file_name }}</div>
                                                             </div>

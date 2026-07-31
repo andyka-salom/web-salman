@@ -1265,11 +1265,10 @@ class CermatReportController extends Controller
                 $extension = strtolower($file->getClientOriginalExtension());
                 $isImage   = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
                 $path      = $file->store('report_attachments', 'public');
-                $absolutePath = storage_path('app/public/' . $path);
 
                 if ($isImage) {
                     try {
-                        $image = $manager->read($absolutePath);
+                        $image = $manager->read($file);
 
                         if ($image->width() > self::MAX_IMAGE_WIDTH) {
                             $image->scaleDown(width: self::MAX_IMAGE_WIDTH);
@@ -1283,7 +1282,7 @@ class CermatReportController extends Controller
                             default       => $image->toJpeg(quality: self::IMAGE_QUALITY)
                         };
 
-                        file_put_contents($absolutePath, (string) $encoded);
+                        Storage::disk('public')->put($path, (string) $encoded);
 
                     } catch (\Exception $e) {
                         Log::warning('Image optimization failed, using original', [
@@ -1414,10 +1413,9 @@ class CermatReportController extends Controller
                 $extension = strtolower($photo->getClientOriginalExtension());
                 $filename  = uniqid() . '_' . time() . '.' . $extension;
                 $path      = $photo->storeAs('action-item-proofs', $filename, 'public');
-                $absolutePath = storage_path('app/public/' . $path);
 
                 try {
-                    $image = $manager->read($absolutePath);
+                    $image = $manager->read($photo);
 
                     if ($image->width() > self::MAX_IMAGE_WIDTH) {
                         $image->scaleDown(width: self::MAX_IMAGE_WIDTH);
@@ -1430,7 +1428,7 @@ class CermatReportController extends Controller
                         default       => $image->toJpeg(quality: self::IMAGE_QUALITY)
                     };
 
-                    file_put_contents($absolutePath, (string) $encoded);
+                    Storage::disk('public')->put($path, (string) $encoded);
 
                 } catch (\Exception $e) {
                     Log::warning('Proof photo optimization failed', [

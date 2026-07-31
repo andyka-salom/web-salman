@@ -172,7 +172,7 @@ class ActionItemMonitoringController extends Controller
             })
 
             ->addColumn('action', function($item) {
-                $photoData = $item->photos->map(fn($p) => asset('storage/'.$p->file_path))->toArray();
+                $photoData = $item->photos->map(fn($p) => \Illuminate\Support\Facades\Storage::disk('public')->url($p->file_path))->toArray();
 
                 $modalData = [
                     'description' => $item->description,

@@ -400,7 +400,7 @@ class FonnteService
             return null; // Sinyal error ke caller
         }
 
-        return asset('storage/' . $relativePath);
+        return Storage::disk('public')->url($relativePath);
     }
 
     /**

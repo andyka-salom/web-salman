@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class OptimizeCoverImage implements ShouldQueue
 {
@@ -32,12 +33,13 @@ class OptimizeCoverImage implements ShouldQueue
     public function handle(): void
     {
         try {
-            $fullPath = storage_path('app/public/' . $this->imagePath);
+            $disk = Storage::disk('public');
 
-            if (!file_exists($fullPath)) return;
+            if (!$disk->exists($this->imagePath)) return;
 
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($fullPath);
+            // Read bytes from the public disk (works for local & S3)
+            $image = $manager->read($disk->get($this->imagePath));
 
             // Gunakan scaleDown agar tidak memperbesar gambar kecil (lebih cepat)
             if ($image->width() > 1200) {
@@ -45,7 +47,8 @@ class OptimizeCoverImage implements ShouldQueue
             }
 
             // Simpan dengan kualitas sedikit lebih rendah untuk performa (80)
-            $image->save($fullPath, quality: 80);
+            $extension = pathinfo($this->imagePath, PATHINFO_EXTENSION) ?: 'jpg';
+            $disk->put($this->imagePath, (string) $image->encodeByExtension($extension, quality: 80));
 
         } catch (\Exception $e) {
             Log::error('Image optimization failed for: ' . $this->imagePath, ['error' => $e->getMessage()]);

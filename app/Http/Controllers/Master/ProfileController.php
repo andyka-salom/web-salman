@@ -47,19 +47,22 @@ class ProfileController extends Controller
                 }
 
                 $file = $request->file('photo');
-                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('profile-photos', $filename, 'public');
+                $extension = $file->getClientOriginalExtension();
+                $filename = uniqid() . '_' . time() . '.' . $extension;
+                $path = 'profile-photos/' . $filename;
 
                 // Optimize Image
                 try {
                     $manager = new ImageManager(new Driver());
-                    $image = $manager->read(storage_path('app/public/' . $path));
+                    $image = $manager->read($file);
                     if ($image->width() > 300) {
                         $image->scale(width: 300);
                     }
-                    $image->save(storage_path('app/public/' . $path), quality: 85);
+                    Storage::disk('public')->put($path, (string) $image->encodeByExtension($extension, quality: 85));
                 } catch (Exception $imgEx) {
                     Log::warning('Profile image optimization failed: ' . $imgEx->getMessage());
+                    // Fallback: keep the original upload untouched
+                    $path = $file->storeAs('profile-photos', $filename, 'public');
                 }
 
                 $data['photo_path'] = $path;
@@ -72,7 +75,7 @@ class ProfileController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Profile updated successfully.',
-                'photo_url' => $user->photo_path ? Storage::url($user->photo_path) : null
+                'photo_url' => $user->photo_path ? Storage::disk('public')->url($user->photo_path) : null
             ]);
 
         } catch (Exception $e) {

@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-2 text-center mb-3 mb-md-0">
                             @if($company->logo)
-                                <img src="{{ Storage::url($company->logo) }}"
+                                <img src="{{ Storage::disk('public')->url($company->logo) }}"
                                      class="img-fluid rounded"
                                      style="width: 150px; height: 150px; object-fit: cover;"
                                      alt="{{ $company->name }}">

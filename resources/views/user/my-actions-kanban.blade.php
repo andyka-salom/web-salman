@@ -636,7 +636,7 @@
                 if(data.photos && data.photos.length > 0) {
                     $('#m_gallery_container').show();
                     data.photos.forEach(p => {
-                        const src = `{{ asset('storage') }}/${p.file_path}`;
+                        const src = `{{ rtrim(Storage::disk('public')->url('/'), '/') }}/${p.file_path}`;
                         $('#m_gallery').append(`
                             <div class="photo-thumb">
                                 <a href="${src}" target="_blank"><img src="${src}"></a>

@@ -49,12 +49,12 @@ class CoverTemplate extends Model
 
     public function getCoverUrlAttribute(): string
     {
-        return asset('storage/' . $this->cover_image_path);
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->cover_image_path);
     }
 
     public function getPageUrlAttribute(): string
     {
-        return asset('storage/' . $this->page_image_path);
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->page_image_path);
     }
 
     // Mutators

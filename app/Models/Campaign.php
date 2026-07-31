@@ -120,7 +120,7 @@ class Campaign extends Model
 
     public function getMediaUrlAttribute(): ?string
     {
-        return $this->media ? asset('storage/' . $this->media) : null;
+        return $this->media ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->media) : null;
     }
 
     // Mutators

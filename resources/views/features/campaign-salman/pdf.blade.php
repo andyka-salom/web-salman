@@ -28,7 +28,7 @@
             width: 100%;
             height: 100%;
             z-index: -10;
-            background-image: url("{{ (isset($campaignSalman) && $campaignSalman->coverTemplate) ? asset('storage/' . $campaignSalman->coverTemplate->page_image_path) : '' }}");
+            background-image: url("{{ (isset($campaignSalman) && $campaignSalman->coverTemplate) ? Storage::disk('public')->url($campaignSalman->coverTemplate->page_image_path) : '' }}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -45,7 +45,7 @@
             position: relative;
             z-index: 10;
             page-break-after: always;
-            background-image: url("{{ (isset($campaignSalman) && $campaignSalman->coverTemplate) ? asset('storage/' . $campaignSalman->coverTemplate->cover_image_path) : '' }}");
+            background-image: url("{{ (isset($campaignSalman) && $campaignSalman->coverTemplate) ? Storage::disk('public')->url($campaignSalman->coverTemplate->cover_image_path) : '' }}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -324,7 +324,7 @@
         <div class="photo-grid clearfix">
             @foreach($campaignSalman->dokumentasi as $foto)
                 <div class="photo-item">
-                    <img src="{{ asset('storage/' . $foto) }}" alt="Dokumentasi">
+                    <img src="{{ Storage::disk('public')->url($foto) }}" alt="Dokumentasi">
                 </div>
             @endforeach
         </div>
@@ -337,7 +337,7 @@
         <div>
             @foreach($campaignSalman->daftar_hadir as $hadir)
                 <div class="hadir-item">
-                    <img src="{{ asset('storage/' . $hadir) }}" alt="Absensi">
+                    <img src="{{ Storage::disk('public')->url($hadir) }}" alt="Absensi">
                 </div>
             @endforeach
         </div>

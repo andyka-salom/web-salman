@@ -38,10 +38,34 @@ return [
             'report' => false,
         ],
 
+        /*
+        | The "public" disk is driver-switchable via FILESYSTEM_PUBLIC_DRIVER.
+        |   - 'local' (default): files live in storage/app/public, served via the
+        |     storage:link symlink at APP_URL/storage (legacy behaviour).
+        |   - 's3'          : files live in the S3-compatible bucket (Biznet NEO
+        |     Object Storage). Every `Storage::disk('public')` call transparently
+        |     targets S3, so no calling code needs to change.
+        | Keys not relevant to the active driver are ignored by Laravel.
+        */
         'public' => [
-            'driver' => 'local',
+            'driver' => env('FILESYSTEM_PUBLIC_DRIVER', 'local'),
+
+            // --- local driver ---
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+
+            // --- s3 driver (Biznet) ---
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', true),
+
+            // URL base: S3 object URL when on s3, otherwise the local symlink URL.
+            'url' => env('FILESYSTEM_PUBLIC_DRIVER', 'local') === 's3'
+                ? env('AWS_URL')
+                : env('APP_URL').'/storage',
+
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
